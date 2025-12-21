@@ -7,9 +7,9 @@ __author__ = "limitcantcode"
 # from vtpy.client import VTubeStudioClient
 # from vtpy.models import Model, Expression, Hotkey
 # from vtpy.exceptions import VTubeStudioError
+from .data import *
 
 __all__ = [
     "__version__",
     # Add exports here as they are implemented
 ]
-

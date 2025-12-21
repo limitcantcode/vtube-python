@@ -157,6 +157,7 @@ Fixes #123
 ```
 vtube-python/
 ├── vtpy/              # Main package
+   └── data            # Data models for requests and responses
 ├── tests/             # Test files
 ├── examples/          # Example scripts
 ├── docs/             # Documentation
