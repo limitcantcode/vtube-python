@@ -50,6 +50,12 @@ class MessageType(str, Enum):
     MoveModelResponse = "MoveModelResponse"
     HotkeyTriggerRequest = "HotkeyTriggerRequest"
     HotkeyTriggerResponse = "HotkeyTriggerResponse"
+    HotkeysInCurrentModelRequest = "HotkeysInCurrentModelRequest"
+    HotkeysInCurrentModelResponse = "HotkeysInCurrentModelResponse"
+
+    # Available Models
+    AvailableModelsRequest = "AvailableModelsRequest"
+    AvailableModelsResponse = "AvailableModelsResponse"
 
     # Expression
     ExpressionStateRequest = "ExpressionStateRequest"
@@ -62,6 +68,8 @@ class MessageType(str, Enum):
     ArtMeshListResponse = "ArtMeshListResponse"
     ColorTintRequest = "ColorTintRequest"
     ColorTintResponse = "ColorTintResponse"
+    ArtMeshSelectionRequest = "ArtMeshSelectionRequest"
+    ArtMeshSelectionResponse = "ArtMeshSelectionResponse"
     SceneColorOverlayInfoRequest = "SceneColorOverlayInfoRequest"
     SceneColorOverlayInfoResponse = "SceneColorOverlayInfoResponse"
     FaceFoundRequest = "FaceFoundRequest"
@@ -72,6 +80,12 @@ class MessageType(str, Enum):
     ParameterValueResponse = "ParameterValueResponse"
     Live2DParameterListRequest = "Live2DParameterListRequest"
     Live2DParameterListResponse = "Live2DParameterListResponse"
+    ParameterCreationRequest = "ParameterCreationRequest"
+    ParameterCreationResponse = "ParameterCreationResponse"
+    ParameterDeletionRequest = "ParameterDeletionRequest"
+    ParameterDeletionResponse = "ParameterDeletionResponse"
+    InjectParameterDataRequest = "InjectParameterDataRequest"
+    InjectParameterDataResponse = "InjectParameterDataResponse"
 
     # Item
     ItemListRequest = "ItemListRequest"
@@ -80,10 +94,14 @@ class MessageType(str, Enum):
     ItemLoadResponse = "ItemLoadResponse"
     ItemUnloadRequest = "ItemUnloadRequest"
     ItemUnloadResponse = "ItemUnloadResponse"
-    ItemAnimationRequest = "ItemAnimationRequest"
-    ItemAnimationResponse = "ItemAnimationResponse"
+    ItemAnimationControlRequest = "ItemAnimationControlRequest"
+    ItemAnimationControlResponse = "ItemAnimationControlResponse"
     ItemMoveRequest = "ItemMoveRequest"
     ItemMoveResponse = "ItemMoveResponse"
+    ItemSortRequest = "ItemSortRequest"
+    ItemSortResponse = "ItemSortResponse"
+    ItemPinRequest = "ItemPinRequest"
+    ItemPinResponse = "ItemPinResponse"
 
     # Background
     SceneListRequest = "SceneListRequest"
@@ -93,16 +111,25 @@ class MessageType(str, Enum):
     SceneChangeRequest = "SceneChangeRequest"
     SceneChangeResponse = "SceneChangeResponse"
 
+    # Physics
+    GetCurrentModelPhysicsRequest = "GetCurrentModelPhysicsRequest"
+    GetCurrentModelPhysicsResponse = "GetCurrentModelPhysicsResponse"
+    SetCurrentModelPhysicsRequest = "SetCurrentModelPhysicsRequest"
+    SetCurrentModelPhysicsResponse = "SetCurrentModelPhysicsResponse"
+
     # NDI
     NDIConfigRequest = "NDIConfigRequest"
     NDIConfigResponse = "NDIConfigResponse"
 
-    # Testing
-    TestingRequest = "TestingRequest"
-    TestingResponse = "TestingResponse"
+    # Post Processing
+    PostProcessingListRequest = "PostProcessingListRequest"
+    PostProcessingListResponse = "PostProcessingListResponse"
+    PostProcessingUpdateRequest = "PostProcessingUpdateRequest"
+    PostProcessingUpdateResponse = "PostProcessingUpdateResponse"
 
     # Event Subscription
     EventSubscriptionRequest = "EventSubscriptionRequest"
+    EventSubscriptionResponse = "EventSubscriptionResponse"
 
 
 class ErrorCode(int, Enum):

@@ -1,6 +1,5 @@
 """Request and response data models for VTube Studio API."""
 
-from email.policy import strict
 from typing import Optional, List, Dict, Any, Literal, Union
 from enum import Enum
 from pydantic import BaseModel
@@ -101,10 +100,10 @@ __all__ = [
     "FaceFoundRequest",
     "FaceFoundResponseData",
     "FaceFoundResponse",
-    "InputParamaterListRequestData",
-    "InputParamaterListRequest",
-    "InputParamaterListResponseData",
-    "InputParamaterListResponse",
+    "InputParameterListRequestData",
+    "InputParameterListRequest",
+    "InputParameterListResponseData",
+    "InputParameterListResponse",
     "ParameterValueRequestData",
     "ParameterValueRequest",
     "ParameterValueResponseData",
@@ -117,19 +116,20 @@ __all__ = [
     "ParameterCreationRequest",
     "ParameterCreationResponseData",
     "ParameterCreationResponse",
-    "ParamaterDeletionRequestData",
-    "ParamaterDeletionRequest",
-    "ParamaterDeletionResponseData",
-    "ParamaterDeletionResponse",
+    "ParameterDeletionRequestData",
+    "ParameterDeletionRequest",
+    "ParameterDeletionResponseData",
+    "ParameterDeletionResponse",
     "ParameterValue",
     "InjectParameterDataRequestData",
     "InjectParameterDataRequest",
     "InjectParameterDataResponseData",
-    "GetCurrentModelRequestData",
-    "GetCurrentModelRequest",
+    "InjectParameterDataResponse",
+    "GetCurrentModelPhysicsRequestData",
+    "GetCurrentModelPhysicsRequest",
     "PhysicsGroup",
-    "GetCurrentModelResponseData",
-    "GetCurrentModelResponse",
+    "GetCurrentModelPhysicsResponseData",
+    "GetCurrentModelPhysicsResponse",
     "StrengthOverride",
     "WindOverride",
     "SetCurrentModelPhysicsRequestData",
@@ -153,10 +153,10 @@ __all__ = [
     "ItemUnloadedItem",
     "ItemUnloadResponseData",
     "ItemUnloadResponse",
-    "ItemAnimationControlRequestRequestData",
-    "ItemAnimationControlRequestRequest",
-    "ItemAnimationControlRequestResponseData",
-    "ItemAnimationControlRequestResponse",
+    "ItemAnimationControlRequestData",
+    "ItemAnimationControlRequest",
+    "ItemAnimationControlResponseData",
+    "ItemAnimationControlResponse",
     "ItemMoveRequestItem",
     "ItemMoveRequestData",
     "ItemMoveRequest",
@@ -294,9 +294,7 @@ class AuthenticationRequestData(BaseModel):
 class AuthenticationRequest(BaseRequest):
     """Request to authenticate with VTube Studio."""
 
-    messageType: Literal[MessageType.AuthenticationTokenRequest] = (
-        MessageType.AuthenticationTokenRequest
-    )
+    messageType: Literal[MessageType.AuthenticationRequest] = MessageType.AuthenticationRequest
     data: AuthenticationRequestData
 
 
@@ -310,9 +308,7 @@ class AuthenticationResponseData(BaseModel):
 class AuthenticationResponse(BaseResponse):
     """Response from authentication request."""
 
-    messageType: Literal[MessageType.AuthenticationTokenResponse] = (
-        MessageType.AuthenticationTokenResponse
-    )
+    messageType: Literal[MessageType.AuthenticationResponse] = MessageType.AuthenticationResponse
     data: Union[AuthenticationResponseData, ErrorData]
 
 
@@ -538,9 +534,7 @@ class ModelLoadRequestResponseData(BaseModel):
 class ModelLoadRequestResponse(BaseResponse):
     """Response from authentication request."""
 
-    messageType: Literal[MessageType.ModelLoadRequestResponse] = (
-        MessageType.ModelLoadRequestResponse
-    )
+    messageType: Literal[MessageType.ModelLoadResponse] = MessageType.ModelLoadResponse
     data: Union[ModelLoadRequestResponseData, ErrorData]
 
 
@@ -934,20 +928,20 @@ class FaceFoundResponse(BaseResponse):
 # ============================================================================
 
 
-class InputParamaterListRequestData(BaseModel):
+class InputParameterListRequestData(BaseModel):
     """Data for authentication request."""
 
 
-class InputParamaterListRequest(BaseRequest):
+class InputParameterListRequest(BaseRequest):
     """Request to authenticate with VTube Studio."""
 
     messageType: Literal[MessageType.InputParameterListRequest] = (
         MessageType.InputParameterListRequest
     )
-    data: InputParamaterListRequestData
+    data: InputParameterListRequestData
 
 
-class InputParamaterListResponseData(BaseModel):
+class InputParameterListResponseData(BaseModel):
     """Data for authentication response."""
 
     modelLoaded: bool
@@ -957,13 +951,13 @@ class InputParamaterListResponseData(BaseModel):
     defaultParameters: List[Parameter]
 
 
-class InputParamaterListResponse(BaseResponse):
+class InputParameterListResponse(BaseResponse):
     """Response from authentication request."""
 
     messageType: Literal[MessageType.InputParameterListResponse] = (
         MessageType.InputParameterListResponse
     )
-    data: Union[InputParamaterListResponseData, ErrorData]
+    data: Union[InputParameterListResponseData, ErrorData]
 
 
 # ============================================================================
@@ -1049,7 +1043,9 @@ class ParameterCreationRequestData(BaseModel):
 class ParameterCreationRequest(BaseRequest):
     """Request to authenticate with VTube Studio."""
 
-    messageType: Literal[MessageType.ParameterCreateRequest] = MessageType.ParameterCreateRequest
+    messageType: Literal[MessageType.ParameterCreationRequest] = (
+        MessageType.ParameterCreationRequest
+    )
     data: ParameterCreationRequestData
 
 
@@ -1062,7 +1058,9 @@ class ParameterCreationResponseData(BaseModel):
 class ParameterCreationResponse(BaseResponse):
     """Response from authentication request."""
 
-    messageType: Literal[MessageType.ParameterCreateResponse] = MessageType.ParameterCreateResponse
+    messageType: Literal[MessageType.ParameterCreationResponse] = (
+        MessageType.ParameterCreationResponse
+    )
     data: Union[ParameterCreationResponseData, ErrorData]
 
 
@@ -1071,30 +1069,34 @@ class ParameterCreationResponse(BaseResponse):
 # ============================================================================
 
 
-class ParamaterDeletionRequestData(BaseModel):
+class ParameterDeletionRequestData(BaseModel):
     """Data for authentication request."""
 
     parameterName: str
 
 
-class ParamaterDeletionRequest(BaseRequest):
+class ParameterDeletionRequest(BaseRequest):
     """Request to authenticate with VTube Studio."""
 
-    messageType: Literal[MessageType.ParameterDeleteRequest] = MessageType.ParameterDeleteRequest
-    data: ParamaterDeletionRequestData
+    messageType: Literal[MessageType.ParameterDeletionRequest] = (
+        MessageType.ParameterDeletionRequest
+    )
+    data: ParameterDeletionRequestData
 
 
-class ParamaterDeletionResponseData(BaseModel):
+class ParameterDeletionResponseData(BaseModel):
     """Data for authentication response."""
 
     parameterName: str
 
 
-class ParamaterDeletionResponse(BaseResponse):
+class ParameterDeletionResponse(BaseResponse):
     """Response from authentication request."""
 
-    messageType: Literal[MessageType.ParameterDeleteResponse] = MessageType.ParameterDeleteResponse
-    data: Union[ParamaterDeletionResponseData, ErrorData]
+    messageType: Literal[MessageType.ParameterDeletionResponse] = (
+        MessageType.ParameterDeletionResponse
+    )
+    data: Union[ParameterDeletionResponseData, ErrorData]
 
 
 # ============================================================================
@@ -1134,7 +1136,7 @@ class InjectParameterDataResponseData(BaseModel):
     """Data for authentication response."""
 
 
-class AuthenticationResponse(BaseResponse):
+class InjectParameterDataResponse(BaseResponse):
     """Response from authentication request."""
 
     messageType: Literal[MessageType.InjectParameterDataResponse] = (
@@ -1148,15 +1150,17 @@ class AuthenticationResponse(BaseResponse):
 # ============================================================================
 
 
-class GetCurrentModelRequestData(BaseModel):
+class GetCurrentModelPhysicsRequestData(BaseModel):
     """Data for authentication request."""
 
 
-class GetCurrentModelRequest(BaseRequest):
+class GetCurrentModelPhysicsRequest(BaseRequest):
     """Request to authenticate with VTube Studio."""
 
-    messageType: Literal[MessageType.GetCurrentModelRequest] = MessageType.GetCurrentModelRequest
-    data: GetCurrentModelRequestData
+    messageType: Literal[MessageType.GetCurrentModelPhysicsRequest] = (
+        MessageType.GetCurrentModelPhysicsRequest
+    )
+    data: GetCurrentModelPhysicsRequestData
 
 
 class PhysicsGroup(BaseModel):
@@ -1166,7 +1170,7 @@ class PhysicsGroup(BaseModel):
     windMultiplier: float
 
 
-class GetCurrentModelResponseData(BaseModel):
+class GetCurrentModelPhysicsResponseData(BaseModel):
     """Data for authentication response."""
 
     modelLoaded: bool
@@ -1183,11 +1187,13 @@ class GetCurrentModelResponseData(BaseModel):
     physicsGroups: List[PhysicsGroup]
 
 
-class GetCurrentModelResponse(BaseResponse):
+class GetCurrentModelPhysicsResponse(BaseResponse):
     """Response from authentication request."""
 
-    messageType: Literal[MessageType.GetCurrentModelResponse] = MessageType.GetCurrentModelResponse
-    data: Union[GetCurrentModelResponseData, ErrorData]
+    messageType: Literal[MessageType.GetCurrentModelPhysicsResponse] = (
+        MessageType.GetCurrentModelPhysicsResponse
+    )
+    data: Union[GetCurrentModelPhysicsResponseData, ErrorData]
 
 
 # ============================================================================
@@ -1412,7 +1418,7 @@ class ItemUnloadResponse(BaseResponse):
 # ============================================================================
 
 
-class ItemAnimationControlRequestRequestData(BaseModel):
+class ItemAnimationControlRequestData(BaseModel):
     """Data for authentication request."""
 
     itemInstanceID: str
@@ -1426,29 +1432,29 @@ class ItemAnimationControlRequestRequestData(BaseModel):
     animationPlayState: bool
 
 
-class ItemAnimationControlRequestRequest(BaseRequest):
+class ItemAnimationControlRequest(BaseRequest):
     """Request to authenticate with VTube Studio."""
 
     messageType: Literal[MessageType.ItemAnimationControlRequest] = (
         MessageType.ItemAnimationControlRequest
     )
-    data: ItemAnimationControlRequestRequestData
+    data: ItemAnimationControlRequestData
 
 
-class ItemAnimationControlRequestResponseData(BaseModel):
+class ItemAnimationControlResponseData(BaseModel):
     """Data for authentication response."""
 
     frame: int
     animationPlaying: bool
 
 
-class ItemAnimationControlRequestResponse(BaseResponse):
+class ItemAnimationControlResponse(BaseResponse):
     """Response from authentication request."""
 
-    messageType: Literal[MessageType.ItemAnimationControlRequestResponse] = (
-        MessageType.ItemAnimationControlRequestResponse
+    messageType: Literal[MessageType.ItemAnimationControlResponse] = (
+        MessageType.ItemAnimationControlResponse
     )
-    data: Union[ItemAnimationControlRequestResponseData, ErrorData]
+    data: Union[ItemAnimationControlResponseData, ErrorData]
 
 
 # ============================================================================
@@ -1521,7 +1527,9 @@ class ItemSplitPoint(Enum):
     ARTMESHID = "UseArtMeshID"
 
 
-class ItemSortOrder(ItemSplitPoint):
+class ItemSortOrder(Enum):
+    UNCHANGED = "Unchanged"
+    ARTMESHID = "UseArtMeshID"
     SPECIALID = "UseSpecialID"
 
 

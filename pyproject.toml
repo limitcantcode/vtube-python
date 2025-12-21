@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "vtube-python"
@@ -50,11 +50,28 @@ Documentation = "https://github.com/limitcantcode/vtube-python#readme"
 Repository = "https://github.com/limitcantcode/vtube-python"
 Issues = "https://github.com/limitcantcode/vtube-python/issues"
 
-[tool.setuptools]
-packages = ["vtpy"]
+[tool.hatch.build]
+include = [
+  "src/*"
+]
 
-[tool.setuptools.package-data]
-vtpy = ["py.typed"]
+[tool.hatch.build.targets.wheel]
+packages = ["src/vtpy"]
+
+[tool.hatch.build.targets.sdist]
+# Basically everything except hidden files/directories (such as .github, .devcontainers, .python-version, etc)
+include = [
+  "/*.toml",
+  "/*.json",
+  "/*.lock",
+  "/*.md",
+  "/mypy.ini",
+  "/noxfile.py",
+  "bin/*",
+  "examples/*",
+  "src/*",
+  "tests/*",
+]
 
 [tool.black]
 line-length = 100

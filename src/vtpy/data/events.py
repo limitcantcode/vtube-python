@@ -21,6 +21,7 @@ from vtpy.data.common import (
 
 __all__ = [
     "EventType",
+    "EVENT_MODEL_MAP",
     "WindowSize",
     "AnimationEventType",
     "ItemEventType",
@@ -29,49 +30,60 @@ __all__ = [
     "EventSubscriptionResponse",
     "MouseButtonID",
     "TestEventSubscriptionRequestConfig",
+    "TestEventSubscriptionRequestData",
     "TestEventSubscriptionRequest",
     "TestEventData",
     "TestEvent",
     "ModelLoadedEventSubscriptionRequestConfig",
+    "ModelLoadedEventSubscriptionRequestData",
     "ModelLoadedEventSubscriptionRequest",
     "ModelLoadedEventData",
     "ModelLoadedEvent",
     "TrackingStatusChangedEventSubscriptionRequestConfig",
+    "TrackingStatusChangedEventSubscriptionRequestData",
     "TrackingStatusChangedEventSubscriptionRequest",
     "TrackingStatusChangedEventData",
     "TrackingStatusChangedEvent",
     "BackgroundChangedEventSubscriptionRequestConfig",
+    "BackgroundChangedEventSubscriptionRequestData",
     "BackgroundChangedEventSubscriptionRequest",
     "BackgroundChangedEventData",
     "BackgroundChangedEvent",
-    "ModelConfigModifiedEventSubscriptionRequestConfig",
-    "ModelConfigModifiedEventSubscriptionRequest",
-    "ModelConfigModifiedEventData",
-    "ModelConfigModifiedEvent",
+    "ModelConfigChangedEventSubscriptionRequestConfig",
+    "ModelConfigChangedEventSubscriptionRequestData",
+    "ModelConfigChangedEventSubscriptionRequest",
+    "ModelConfigChangedEventData",
+    "ModelConfigChangedEvent",
     "ModelMovedEventSubscriptionRequestConfig",
+    "ModelMovedEventSubscriptionRequestData",
     "ModelMovedEventSubscriptionRequest",
     "ModelPositionData",
     "ModelMovedEventData",
     "ModelMovedEvent",
     "ModelOutlineEventSubscriptionRequestConfig",
+    "ModelOutlineEventSubscriptionRequestData",
     "ModelOutlineEventSubscriptionRequest",
     "ConvexHullPoint",
     "ModelOutlineEventData",
     "ModelOutlineEvent",
     "HotkeyTriggeredEventSubscriptionRequestConfig",
+    "HotkeyTriggeredEventSubscriptionRequestData",
     "HotkeyTriggeredEventSubscriptionRequest",
     "HotkeyTriggeredEventData",
     "HotkeyTriggeredEvent",
     "ModelAnimationEventSubscriptionRequestConfig",
+    "ModelAnimationEventSubscriptionRequestData",
     "ModelAnimationEventSubscriptionRequest",
     "ModelAnimationEventData",
     "ModelAnimationEvent",
     "ItemEventSubscriptionRequestConfig",
+    "ItemEventSubscriptionRequestData",
     "ItemEventSubscriptionRequest",
     "ItemPosition",
     "ItemEventData",
     "ItemEvent",
     "ModelClickedEventSubscriptionRequestConfig",
+    "ModelClickedEventSubscriptionRequestData",
     "ModelClickedEventSubscriptionRequest",
     "HitInfo",
     "ArtMeshHit",
@@ -79,24 +91,16 @@ __all__ = [
     "ModelClickedEventData",
     "ModelClickedEvent",
     "PostProcessingEventSubscriptionRequestConfig",
+    "PostProcessingEventSubscriptionRequestData",
     "PostProcessingEventSubscriptionRequest",
     "PostProcessingEventData",
     "PostProcessingEvent",
     "Live2DCubismEditorConnectedEventSubscriptionRequestConfig",
+    "Live2DCubismEditorConnectedEventSubscriptionRequestData",
     "Live2DCubismEditorConnectedEventSubscriptionRequest",
     "Live2DCubismEditorConnectedEventData",
     "Live2DCubismEditorConnectedEvent",
 ]
-# ============================================================================
-# Helper Types
-# ============================================================================
-
-
-class WindowSize(BaseModel):
-    x: float
-    y: float
-
-
 # ============================================================================
 # Event Types
 # ============================================================================
@@ -111,6 +115,7 @@ class EventType(Enum):
     BackgroundChangedEvent = "BackgroundChangedEvent"
     ModelConfigChangedEvent = "ModelConfigChangedEvent"
     ModelMovedEvent = "ModelMovedEvent"
+    ModelOutlineEvent = "ModelOutlineEvent"
     HotkeyTriggeredEvent = "HotkeyTriggeredEvent"
     ModelAnimationEvent = "ModelAnimationEvent"
     ItemEvent = "ItemEvent"
@@ -133,6 +138,16 @@ class ItemEventType(Enum):
     Clicked = "Clicked"
     Locked = "Locked"
     Unlocked = "Unlocked"
+
+
+# ============================================================================
+# Helper Types
+# ============================================================================
+
+
+class WindowSize(BaseModel):
+    x: float
+    y: float
 
 
 # ============================================================================
@@ -181,11 +196,18 @@ class TestEventSubscriptionRequestConfig(BaseModel):
     testMessageForEvent: str = Field(description="Test message returned in the event.")
 
 
+class TestEventSubscriptionRequestData(BaseModel):
+    """Config for test event subscription request."""
+
+    eventName: Literal[EventType.TestEvent] = EventType.TestEvent
+    subscribe: bool = True
+    config: TestEventSubscriptionRequestConfig
+
+
 class TestEventSubscriptionRequest(BaseEventSubscriptionRequest):
     """Request to subscribe to model loaded events."""
 
-    eventName: Literal[EventType.TestEvent] = EventType.TestEvent
-    config: TestEventSubscriptionRequestConfig
+    data: TestEventSubscriptionRequestData
 
 
 class TestEventData(BaseModel):
@@ -198,7 +220,7 @@ class TestEventData(BaseModel):
 class TestEvent(BaseEvent):
     """Event fired when a model is loaded."""
 
-    eventName: Literal[EventType.TestEvent] = EventType.TestEvent
+    messageType: Literal[EventType.TestEvent] = EventType.TestEvent
     data: TestEventData
 
 
@@ -213,11 +235,18 @@ class ModelLoadedEventSubscriptionRequestConfig(BaseModel):
     modelID: Optional[List[str]] = Field(None, description="The ID of the model to listen for.")
 
 
-class ModelLoadedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+class ModelLoadedEventSubscriptionRequestData(BaseModel):
     """Request to subscribe to model loaded events."""
 
     eventName: Literal[EventType.ModelLoadedEvent] = EventType.ModelLoadedEvent
+    subscribe: bool = True
     config: ModelLoadedEventSubscriptionRequestConfig
+
+
+class ModelLoadedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+    """Request to subscribe to model loaded events."""
+
+    data: ModelLoadedEventSubscriptionRequestData
 
 
 class ModelLoadedEventData(BaseModel):
@@ -244,11 +273,18 @@ class TrackingStatusChangedEventSubscriptionRequestConfig(BaseModel):
     """Config for model loaded event subscription request."""
 
 
-class TrackingStatusChangedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+class TrackingStatusChangedEventSubscriptionRequestData(BaseModel):
     """Request to subscribe to model loaded events."""
 
     eventName: Literal[EventType.TrackingStatusChangedEvent] = EventType.TrackingStatusChangedEvent
+    subscribe: bool = True
     config: TrackingStatusChangedEventSubscriptionRequestConfig
+
+
+class TrackingStatusChangedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+    """Request to subscribe to model loaded events."""
+
+    data: TrackingStatusChangedEventSubscriptionRequestData
 
 
 class TrackingStatusChangedEventData(BaseModel):
@@ -262,7 +298,9 @@ class TrackingStatusChangedEventData(BaseModel):
 class TrackingStatusChangedEvent(BaseEvent):
     """Event fired when a model is loaded."""
 
-    eventName: Literal[EventType.TrackingStatusChangedEvent] = EventType.TrackingStatusChangedEvent
+    messageType: Literal[EventType.TrackingStatusChangedEvent] = (
+        EventType.TrackingStatusChangedEvent
+    )
     data: TrackingStatusChangedEventData
 
 
@@ -275,11 +313,18 @@ class BackgroundChangedEventSubscriptionRequestConfig(BaseModel):
     """Config for model loaded event subscription request."""
 
 
-class BackgroundChangedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+class BackgroundChangedEventSubscriptionRequestData(BaseModel):
     """Request to subscribe to model loaded events."""
 
     eventName: Literal[EventType.BackgroundChangedEvent] = EventType.BackgroundChangedEvent
+    subscribe: bool = True
     config: BackgroundChangedEventSubscriptionRequestConfig
+
+
+class BackgroundChangedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+    """Request to subscribe to model loaded events."""
+
+    data: BackgroundChangedEventSubscriptionRequestData
 
 
 class BackgroundChangedEventData(BaseModel):
@@ -291,7 +336,7 @@ class BackgroundChangedEventData(BaseModel):
 class BackgroundChangedEvent(BaseEvent):
     """Event fired when a model is loaded."""
 
-    eventName: Literal[EventType.BackgroundChangedEvent] = EventType.BackgroundChangedEvent
+    messageType: Literal[EventType.BackgroundChangedEvent] = EventType.BackgroundChangedEvent
     data: BackgroundChangedEventData
 
 
@@ -300,18 +345,25 @@ class BackgroundChangedEvent(BaseEvent):
 # ============================================================================
 
 
-class ModelConfigModifiedEventSubscriptionRequestConfig(BaseModel):
+class ModelConfigChangedEventSubscriptionRequestConfig(BaseModel):
     """Config for model loaded event subscription request."""
 
 
-class ModelConfigModifiedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+class ModelConfigChangedEventSubscriptionRequestData(BaseModel):
     """Request to subscribe to model loaded events."""
 
-    eventName: Literal[EventType.ModelConfigModifiedEvent] = EventType.ModelConfigModifiedEvent
-    config: ModelConfigModifiedEventSubscriptionRequestConfig
+    eventName: Literal[EventType.ModelConfigChangedEvent] = EventType.ModelConfigChangedEvent
+    subscribe: bool = True
+    config: ModelConfigChangedEventSubscriptionRequestConfig
 
 
-class ModelConfigModifiedEventData(BaseModel):
+class ModelConfigChangedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+    """Request to subscribe to model loaded events."""
+
+    data: ModelConfigChangedEventSubscriptionRequestData
+
+
+class ModelConfigChangedEventData(BaseModel):
     """Data for model loaded event."""
 
     modelID: str
@@ -319,11 +371,11 @@ class ModelConfigModifiedEventData(BaseModel):
     hotkeyConfigChanged: bool
 
 
-class ModelConfigModifiedEvent(BaseEvent):
+class ModelConfigChangedEvent(BaseEvent):
     """Event fired when a model is loaded."""
 
-    eventName: Literal[EventType.ModelConfigModifiedEvent] = EventType.ModelConfigModifiedEvent
-    data: ModelConfigModifiedEventData
+    messageType: Literal[EventType.ModelConfigChangedEvent] = EventType.ModelConfigChangedEvent
+    data: ModelConfigChangedEventData
 
 
 # ============================================================================
@@ -335,11 +387,18 @@ class ModelMovedEventSubscriptionRequestConfig(BaseModel):
     """Config for model loaded event subscription request."""
 
 
-class ModelMovedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+class ModelMovedEventSubscriptionRequestData(BaseModel):
     """Request to subscribe to model loaded events."""
 
     eventName: Literal[EventType.ModelMovedEvent] = EventType.ModelMovedEvent
+    subscribe: bool = True
     config: ModelMovedEventSubscriptionRequestConfig
+
+
+class ModelMovedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+    """Request to subscribe to model loaded events."""
+
+    data: ModelMovedEventSubscriptionRequestData
 
 
 class ModelPositionData(BaseModel):
@@ -362,7 +421,7 @@ class ModelMovedEventData(BaseModel):
 class ModelMovedEvent(BaseEvent):
     """Event fired when a model is loaded."""
 
-    eventName: Literal[EventType.ModelMovedEvent] = EventType.ModelMovedEvent
+    messageType: Literal[EventType.ModelMovedEvent] = EventType.ModelMovedEvent
     data: ModelMovedEventData
 
 
@@ -377,11 +436,18 @@ class ModelOutlineEventSubscriptionRequestConfig(BaseModel):
     draw: bool
 
 
-class ModelOutlineEventSubscriptionRequest(BaseEventSubscriptionRequest):
+class ModelOutlineEventSubscriptionRequestData(BaseModel):
     """Request to subscribe to model loaded events."""
 
     eventName: Literal[EventType.ModelOutlineEvent] = EventType.ModelOutlineEvent
+    subscribe: bool = True
     config: ModelOutlineEventSubscriptionRequestConfig
+
+
+class ModelOutlineEventSubscriptionRequest(BaseEventSubscriptionRequest):
+    """Request to subscribe to model loaded events."""
+
+    data: ModelOutlineEventSubscriptionRequestData
 
 
 class ConvexHullPoint(BaseModel):
@@ -402,7 +468,7 @@ class ModelOutlineEventData(BaseModel):
 class ModelOutlineEvent(BaseEvent):
     """Event fired when a model is loaded."""
 
-    eventName: Literal[EventType.ModelOutlineEvent] = EventType.ModelOutlineEvent
+    messageType: Literal[EventType.ModelOutlineEvent] = EventType.ModelOutlineEvent
     data: ModelOutlineEventData
 
 
@@ -418,11 +484,18 @@ class HotkeyTriggeredEventSubscriptionRequestConfig(BaseModel):
     ignoreHotkeysTriggeredByAPI: bool
 
 
-class HotkeyTriggeredEventSubscriptionRequest(BaseEventSubscriptionRequest):
+class HotkeyTriggeredEventSubscriptionRequestData(BaseModel):
     """Request to subscribe to model loaded events."""
 
     eventName: Literal[EventType.HotkeyTriggeredEvent] = EventType.HotkeyTriggeredEvent
+    subscribe: bool = True
     config: HotkeyTriggeredEventSubscriptionRequestConfig
+
+
+class HotkeyTriggeredEventSubscriptionRequest(BaseEventSubscriptionRequest):
+    """Request to subscribe to model loaded events."""
+
+    data: HotkeyTriggeredEventSubscriptionRequestData
 
 
 class HotkeyTriggeredEventData(BaseModel):
@@ -441,7 +514,7 @@ class HotkeyTriggeredEventData(BaseModel):
 class HotkeyTriggeredEvent(BaseEvent):
     """Event fired when a model is loaded."""
 
-    eventName: Literal[EventType.HotkeyTriggeredEvent] = EventType.HotkeyTriggeredEvent
+    messageType: Literal[EventType.HotkeyTriggeredEvent] = EventType.HotkeyTriggeredEvent
     data: HotkeyTriggeredEventData
 
 
@@ -457,11 +530,18 @@ class ModelAnimationEventSubscriptionRequestConfig(BaseModel):
     ignoreIdleAnimations: bool
 
 
-class ModelAnimationEventSubscriptionRequest(BaseEventSubscriptionRequest):
+class ModelAnimationEventSubscriptionRequestData(BaseEventSubscriptionRequest):
     """Request to subscribe to model loaded events."""
 
     eventName: Literal[EventType.ModelAnimationEvent] = EventType.ModelAnimationEvent
+    subscribe: bool = True
     config: ModelAnimationEventSubscriptionRequestConfig
+
+
+class ModelAnimationEventSubscriptionRequest(BaseEventSubscriptionRequest):
+    """Request to subscribe to model loaded events."""
+
+    data: ModelAnimationEventSubscriptionRequestData
 
 
 class ModelAnimationEventData(BaseModel):
@@ -481,7 +561,7 @@ class ModelAnimationEventData(BaseModel):
 class ModelAnimationEvent(BaseEvent):
     """Event fired when a model is loaded."""
 
-    eventName: Literal[EventType.ModelAnimationEvent] = EventType.ModelAnimationEvent
+    messageType: Literal[EventType.ModelAnimationEvent] = EventType.ModelAnimationEvent
     data: ModelAnimationEventData
 
 
@@ -497,11 +577,18 @@ class ItemEventSubscriptionRequestConfig(BaseModel):
     itemFileNames: List[str]
 
 
-class ItemEventSubscriptionRequest(BaseEventSubscriptionRequest):
+class ItemEventSubscriptionRequestData(BaseEventSubscriptionRequest):
     """Request to subscribe to model loaded events."""
 
     eventName: Literal[EventType.ItemEvent] = EventType.ItemEvent
+    subscribe: bool = True
     config: ItemEventSubscriptionRequestConfig
+
+
+class ItemEventSubscriptionRequest(BaseEventSubscriptionRequest):
+    """Request to subscribe to model loaded events."""
+
+    data: ItemEventSubscriptionRequestData
 
 
 class ItemPosition(BaseModel):
@@ -521,7 +608,7 @@ class ItemEventData(BaseModel):
 class ItemEvent(BaseEvent):
     """Event fired when a model is loaded."""
 
-    eventName: Literal[EventType.ItemEvent] = EventType.ItemEvent
+    messageType: Literal[EventType.ItemEvent] = EventType.ItemEvent
     data: ItemEventData
 
 
@@ -536,11 +623,18 @@ class ModelClickedEventSubscriptionRequestConfig(BaseModel):
     onlyClicksOnModel: bool
 
 
-class ModelClickedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+class ModelClickedEventSubscriptionRequestData(BaseModel):
     """Request to subscribe to model loaded events."""
 
     eventName: Literal[EventType.ModelClickedEvent] = EventType.ModelClickedEvent
+    subscribe: bool = True
     config: ModelClickedEventSubscriptionRequestConfig
+
+
+class ModelClickedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+    """Request to subscribe to model loaded events."""
+
+    data: ModelClickedEventSubscriptionRequestData
 
 
 class HitInfo(BaseModel):
@@ -584,7 +678,7 @@ class ModelClickedEventData(BaseModel):
 class ModelClickedEvent(BaseEvent):
     """Event fired when a model is loaded."""
 
-    eventName: Literal[EventType.ModelClickedEvent] = EventType.ModelClickedEvent
+    messageType: Literal[EventType.ModelClickedEvent] = EventType.ModelClickedEvent
     data: ModelClickedEventData
 
 
@@ -597,11 +691,18 @@ class PostProcessingEventSubscriptionRequestConfig(BaseModel):
     """Config for model loaded event subscription request."""
 
 
-class PostProcessingEventSubscriptionRequest(BaseEventSubscriptionRequest):
+class PostProcessingEventSubscriptionRequestData(BaseEventSubscriptionRequest):
     """Request to subscribe to model loaded events."""
 
     eventName: Literal[EventType.PostProcessingEvent] = EventType.PostProcessingEvent
+    subscribe: bool = True
     config: PostProcessingEventSubscriptionRequestConfig
+
+
+class PostProcessingEventSubscriptionRequest(BaseEventSubscriptionRequest):
+    """Request to subscribe to model loaded events."""
+
+    data: PostProcessingEventSubscriptionRequestData
 
 
 class PostProcessingEventData(BaseModel):
@@ -614,7 +715,7 @@ class PostProcessingEventData(BaseModel):
 class PostProcessingEvent(BaseEvent):
     """Event fired when a model is loaded."""
 
-    eventName: Literal[EventType.PostProcessingEvent] = EventType.PostProcessingEvent
+    messageType: Literal[EventType.PostProcessingEvent] = EventType.PostProcessingEvent
     data: PostProcessingEventData
 
 
@@ -627,13 +728,20 @@ class Live2DCubismEditorConnectedEventSubscriptionRequestConfig(BaseModel):
     """Config for model loaded event subscription request."""
 
 
-class Live2DCubismEditorConnectedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+class Live2DCubismEditorConnectedEventSubscriptionRequestData(BaseEventSubscriptionRequest):
     """Request to subscribe to model loaded events."""
 
     eventName: Literal[EventType.Live2DCubismEditorConnectedEvent] = (
         EventType.Live2DCubismEditorConnectedEvent
     )
+    subscribe: bool = True
     config: Live2DCubismEditorConnectedEventSubscriptionRequestConfig
+
+
+class Live2DCubismEditorConnectedEventSubscriptionRequest(BaseEventSubscriptionRequest):
+    """Request to subscribe to model loaded events."""
+
+    data: Live2DCubismEditorConnectedEventSubscriptionRequestData
 
 
 class Live2DCubismEditorConnectedEventData(BaseModel):
@@ -647,7 +755,25 @@ class Live2DCubismEditorConnectedEventData(BaseModel):
 class Live2DCubismEditorConnectedEvent(BaseEvent):
     """Event fired when a model is loaded."""
 
-    eventName: Literal[EventType.Live2DCubismEditorConnectedEvent] = (
+    messageType: Literal[EventType.Live2DCubismEditorConnectedEvent] = (
         EventType.Live2DCubismEditorConnectedEvent
     )
     data: Live2DCubismEditorConnectedEventData
+
+
+# Mapping of event types to their corresponding Pydantic models
+EVENT_MODEL_MAP: Dict[EventType, type] = {
+    EventType.TestEvent: TestEvent,
+    EventType.ModelLoadedEvent: ModelLoadedEvent,
+    EventType.TrackingStatusChangedEvent: TrackingStatusChangedEvent,
+    EventType.BackgroundChangedEvent: BackgroundChangedEvent,
+    EventType.ModelConfigChangedEvent: ModelConfigChangedEvent,
+    EventType.ModelMovedEvent: ModelMovedEvent,
+    EventType.ModelOutlineEvent: ModelOutlineEvent,
+    EventType.HotkeyTriggeredEvent: HotkeyTriggeredEvent,
+    EventType.ModelAnimationEvent: ModelAnimationEvent,
+    EventType.ItemEvent: ItemEvent,
+    EventType.ModelClickedEvent: ModelClickedEvent,
+    EventType.PostProcessingEvent: PostProcessingEvent,
+    EventType.Live2DCubismEditorConnectedEvent: Live2DCubismEditorConnectedEvent,
+}
