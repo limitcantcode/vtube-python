@@ -193,7 +193,9 @@ class MouseButtonID(Enum):
 class TestEventSubscriptionRequestConfig(BaseModel):
     """Config for test event subscription request."""
 
-    testMessageForEvent: str = Field(description="Test message returned in the event.")
+    testMessageForEvent: Optional[str] = Field(
+        None, description="Test message returned in the event."
+    )
 
 
 class TestEventSubscriptionRequestData(BaseModel):
@@ -433,7 +435,7 @@ class ModelMovedEvent(BaseEvent):
 class ModelOutlineEventSubscriptionRequestConfig(BaseModel):
     """Config for model loaded event subscription request."""
 
-    draw: bool
+    draw: Optional[bool] = Field(None, description="Whether to draw the model outline.")
 
 
 class ModelOutlineEventSubscriptionRequestData(BaseModel):
@@ -480,8 +482,12 @@ class ModelOutlineEvent(BaseEvent):
 class HotkeyTriggeredEventSubscriptionRequestConfig(BaseModel):
     """Config for model loaded event subscription request."""
 
-    onlyForAction: HotkeyAction
-    ignoreHotkeysTriggeredByAPI: bool
+    onlyForAction: Optional[HotkeyAction] = Field(
+        None, description="Only trigger events for this action."
+    )
+    ignoreHotkeysTriggeredByAPI: bool = Field(
+        False, description="Ignore hotkeys triggered by the API."
+    )
 
 
 class HotkeyTriggeredEventSubscriptionRequestData(BaseModel):
@@ -526,8 +532,8 @@ class HotkeyTriggeredEvent(BaseEvent):
 class ModelAnimationEventSubscriptionRequestConfig(BaseModel):
     """Config for model loaded event subscription request."""
 
-    ignoreLive2DItems: bool
-    ignoreIdleAnimations: bool
+    ignoreLive2DItems: bool = Field(False, description="Ignore live2d items.")
+    ignoreIdleAnimations: bool = Field(False, description="Ignore idle animations.")
 
 
 class ModelAnimationEventSubscriptionRequestData(BaseEventSubscriptionRequest):
@@ -573,8 +579,12 @@ class ModelAnimationEvent(BaseEvent):
 class ItemEventSubscriptionRequestConfig(BaseModel):
     """Config for model loaded event subscription request."""
 
-    itemInstanceIDs: List[str]
-    itemFileNames: List[str]
+    itemInstanceIDs: Optional[List[str]] = Field(
+        None, description="The IDs of the items to listen for."
+    )
+    itemFileNames: Optional[List[str]] = Field(
+        None, description="The file names of the items to listen for."
+    )
 
 
 class ItemEventSubscriptionRequestData(BaseEventSubscriptionRequest):
@@ -620,7 +630,9 @@ class ItemEvent(BaseEvent):
 class ModelClickedEventSubscriptionRequestConfig(BaseModel):
     """Config for model loaded event subscription request."""
 
-    onlyClicksOnModel: bool
+    onlyClicksOnModel: Optional[bool] = Field(
+        True, description="Only trigger events for clicks on the model."
+    )
 
 
 class ModelClickedEventSubscriptionRequestData(BaseModel):
