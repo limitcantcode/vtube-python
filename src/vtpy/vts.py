@@ -128,8 +128,9 @@ class VTS:
             logger.error(f"Failed to connect to VTube Studio: {e}", exc_info=True)
             raise ConnectionError(f"Failed to connect to VTube Studio: {e}") from e
 
-        # Start receiving messages
+        # Start async processors
         self._receive_task = asyncio.create_task(self._receive_loop())
+        self._handler_processing_task = asyncio.create_task(self._handler_processing_loop())
 
         try:
             # Handles provided auth_file
@@ -358,9 +359,10 @@ class VTS:
         while True:
             try:
                 handlers_to_process: List[Awaitable] = list()
-                if not self._handler_processing_queue.empty():
+                handlers_to_process.append(await self._handler_processing_queue.get())
+                while not self._handler_processing_queue.empty():
                     handlers_to_process.append(await self._handler_processing_queue.get())
-                results = asyncio.gather(*handlers_to_process, return_exceptions=True)
+                results = await asyncio.gather(*handlers_to_process, return_exceptions=True)
                 for result in results:
                     if isinstance(result, Exception):
                         logger.error(f"Error processing handler: {result}", exc_info=True)
