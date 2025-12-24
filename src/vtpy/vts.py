@@ -463,7 +463,7 @@ class VTS:
     def remove_event_handler(
         self,
         event_type: EventType,
-        handler: Callable[[BaseEvent], Awaitable[None]],
+        handler: Optional[Callable[[BaseEvent], Awaitable[None]]] = None,
     ) -> None:
         """Remove an event handler.
 
@@ -477,11 +477,14 @@ class VTS:
         if event_type not in self._event_handlers:
             raise ValueError(f"No handlers registered for {event_type}")
 
-        if handler not in self._event_handlers[event_type]:
+        if handler is None:
+            del self._event_handlers[event_type]
+            logger.debug(f"Removed all handlers for {event_type}")
+        elif handler not in self._event_handlers[event_type]:
             raise ValueError("Handler not found")
-
-        self._event_handlers[event_type].remove(handler)
-        logger.debug(f"Removed handler for {event_type}")
+        else:
+            self._event_handlers[event_type].remove(handler)
+            logger.debug(f"Removed handler for {event_type}")
 
     async def event_sub_test(
         self, data: TestEventSubscriptionRequestData
