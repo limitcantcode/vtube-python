@@ -30,18 +30,6 @@ class VTS:
 
     This class manages the WebSocket connection, handles authentication,
     and provides an event-driven interface for subscribing to VTube Studio events.
-
-    Example:
-        ```python
-        vts = VTS(plugin_name="MyPlugin", plugin_developer="Developer")
-        await vts.start(host="localhost", port=8001, auth_token="your_token")
-
-        # Register event handler
-        async def on_model_loaded(event: ModelLoadedEvent):
-            print(f"Model loaded: {event.data.modelName}")
-
-        vts.on_event(EventType.ModelLoadedEvent, on_model_loaded)
-        ```
     """
 
     def __init__(
@@ -445,14 +433,6 @@ class VTS:
             event_type: The type of event to listen for
             handler: Async function that will be called when the event occurs.
                     The function should accept one parameter (the event object).
-
-        Example:
-            ```python
-            async def on_model_loaded(event: ModelLoadedEvent):
-                print(f"Model loaded: {event.data.modelName}")
-
-            vts.on_event(EventType.ModelLoadedEvent, on_model_loaded)
-            ```
         """
         if event_type not in self._event_handlers:
             self._event_handlers[event_type] = list()
