@@ -115,6 +115,10 @@ class VTS:
             ConnectionError: If connection fails
             ValueError: If authentication fails
         """
+
+        if self._connected:
+            raise ConnectionError("Already connected to a VTube Studio instance")
+
         self._host = host
         self._port = port
 
