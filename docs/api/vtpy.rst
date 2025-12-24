@@ -1,8 +1,12 @@
 vtpy Package
 ============
 
-.. automodule:: vtpy
+VTS Class
+---------
+
+.. automodule:: vtpy.vts
    :members:
    :undoc-members:
    :show-inheritance:
+   :special-members: __init__
 

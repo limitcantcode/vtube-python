@@ -2,8 +2,9 @@
 import os
 import sys
 
-# Add the project root to the path
+# Add the project root and src directory to the path
 sys.path.insert(0, os.path.abspath(".."))
+sys.path.insert(0, os.path.abspath("../src"))
 
 # Project information
 project = "vtube-python"
