@@ -98,7 +98,7 @@ class VTS:
         host: str = "localhost",
         port: int = 8001,
         auth_token: Optional[str] = None,
-        auth_file: Optional[Union[str, Path]] = None,
+        auth_file: Union[str, Path] = "vts_token.txt",
         save_auth_token: bool = True,
     ) -> str:
         """Connect to VTube Studio and authenticate.
