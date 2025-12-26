@@ -700,7 +700,7 @@ class Hotkey(BaseModel):
 
 class Parameter(BaseModel):
     name: str
-    value: int
+    value: float
 
 
 class Expression(BaseModel):
@@ -709,7 +709,7 @@ class Expression(BaseModel):
     active: bool
     deactivateWhenKeyIsLetGo: bool
     autoDeactivateAfterSeconds: bool
-    secondsRemaining: int
+    secondsRemaining: float
     usedInHotkeys: List[Hotkey]
     parameters: List[Parameter]
 
