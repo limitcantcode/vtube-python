@@ -53,10 +53,10 @@ __all__ = [
     "AvailableModel",
     "AvailableModelsResponseData",
     "AvailableModelsResponse",
-    "ModelLoadRequestRequestData",
-    "ModelLoadRequestRequest",
-    "ModelLoadRequestResponseData",
-    "ModelLoadRequestResponse",
+    "ModelLoadRequestData",
+    "ModelLoadRequest",
+    "ModelLoadResponseData",
+    "ModelLoadResponse",
     "MoveModelRequestData",
     "MoveModelRequest",
     "MoveModelResponseData",
@@ -513,30 +513,30 @@ class AvailableModelsResponse(BaseResponse):
 # ============================================================================
 
 
-class ModelLoadRequestRequestData(BaseModel):
+class ModelLoadRequestData(BaseModel):
     """Data for authentication request."""
 
     modelID: Optional[str] = Field(None, description="The ID of the model to load.")
 
 
-class ModelLoadRequestRequest(BaseRequest):
+class ModelLoadRequest(BaseRequest):
     """Request to authenticate with VTube Studio."""
 
     messageType: Literal[MessageType.ModelLoadRequest] = MessageType.ModelLoadRequest
-    data: ModelLoadRequestRequestData
+    data: ModelLoadRequestData
 
 
-class ModelLoadRequestResponseData(BaseModel):
+class ModelLoadResponseData(BaseModel):
     """Data for authentication response."""
 
     modelID: Optional[str] = Field(None, description="The ID of the model that was loaded.")
 
 
-class ModelLoadRequestResponse(BaseResponse):
+class ModelLoadResponse(BaseResponse):
     """Response from authentication request."""
 
     messageType: Literal[MessageType.ModelLoadResponse] = MessageType.ModelLoadResponse
-    data: Union[ModelLoadRequestResponseData, ErrorData]
+    data: Union[ModelLoadResponseData, ErrorData]
 
 
 # ============================================================================
