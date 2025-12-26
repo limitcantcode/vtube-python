@@ -129,7 +129,7 @@ class VTS:
             if isinstance(auth_file, str):
                 auth_file = Path(auth_file)
             if isinstance(auth_file, Path):
-                auth_file.mkdir(parents=True, exist_ok=True)
+                auth_file.parent.mkdir(parents=True, exist_ok=True)
             if auth_file and auth_file.is_file():
                 with open(auth_file, "r") as f:
                     auth_token = f.read().strip()
