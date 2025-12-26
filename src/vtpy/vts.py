@@ -661,14 +661,12 @@ class VTS:
             raise VTSRequestError(response.data.message, response.data.errorID)
         return response
 
-    async def request_model_load(
-        self, data: ModelLoadRequestRequestData
-    ) -> ModelLoadRequestResponse:
-        request = ModelLoadRequestRequest(
+    async def request_model_load(self, data: ModelLoadRequestData) -> ModelLoadResponse:
+        request = ModelLoadRequest(
             requestID=self.generate_request_id(),
             data=data,
         )
-        response = await self._send_request(request, ModelLoadRequestResponse)
+        response = await self._send_request(request, ModelLoadResponse)
         if isinstance(response.data, ErrorData):
             raise VTSRequestError(response.data.message, response.data.errorID)
         return response
